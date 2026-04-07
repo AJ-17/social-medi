@@ -1,155 +1,1059 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pulse — Social Media Dashboard</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pulse — Social Media Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+:root {
+  --bg: #09090f;
+  --bg2: #111118;
+  --bg3: #18181f;
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(255,255,255,0.15);
+  --text: #f0f0f8;
+  --text2: #8888aa;
+  --text3: #5555777;
+  --accent: #7c6bff;
+  --accent2: #ff6b9d;
+  --ig: #e1306c;
+  --tw: #1d9bf0;
+  --yt: #ff0000;
+  --li: #0a66c2;
+  --green: #22c55e;
+  --red: #ef4444;
+  --amber: #f59e0b;
+  --r: 14px;
+  --r2: 20px;
+  --shadow: 0 4px 30px rgba(0,0,0,0.4);
+  --glow: 0 0 40px rgba(124,107,255,0.08);
+  --sidebar-w: 240px;
+  --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+}
+[data-theme="light"] {
+  --bg: #f4f4fb;
+  --bg2: #ffffff;
+  --bg3: #ebebf5;
+  --border: rgba(0,0,0,0.08);
+  --border-hover: rgba(0,0,0,0.18);
+  --text: #0d0d1a;
+  --text2: #666688;
+  --text3: #aaaacc;
+  --shadow: 0 4px 24px rgba(0,0,0,0.1);
+  --glow: 0 0 40px rgba(124,107,255,0.05);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Cabinet Grotesk',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
+  min-height:100vh;
+  overflow-x:hidden;
+  transition:background var(--transition), color var(--transition);
+}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar-w);
+  min-height:100vh;
+  background:var(--bg2);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  position:fixed;
+  left:0;top:0;bottom:0;
+  z-index:100;
+  transition:transform var(--transition), background var(--transition);
+}
+.logo{
+  padding:28px 24px 20px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid var(--border);
+}
+.logo-pulse{
+  width:32px;height:32px;
+  background:var(--accent);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  box-shadow:0 0 20px rgba(124,107,255,0.4);
+}
+.logo-pulse::after{
+  content:'';
+  position:absolute;
+  width:10px;height:10px;
+  background:#fff;
+  border-radius:50%;
+  animation:pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:0.7}}
+.logo-text{
+  font-size:20px;font-weight:900;letter-spacing:0.04em;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.logo-badge{
+  margin-left:auto;
+  background:rgba(124,107,255,0.15);
+  color:var(--accent);
+  font-size:9px;font-weight:700;letter-spacing:0.08em;
+  padding:2px 7px;border-radius:20px;
+  border:1px solid rgba(124,107,255,0.25);
+}
+.nav{
+  padding:16px 12px;
+  flex:1;
+  display:flex;flex-direction:column;gap:4px;
+}
+.nav-group-label{
+  font-size:10px;font-weight:700;letter-spacing:0.1em;
+  color:var(--text3);
+  padding:12px 12px 6px;
+  text-transform:uppercase;
+}
+.nav-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 12px;
+  border-radius:10px;
+  color:var(--text2);
+  text-decoration:none;
+  font-size:14px;font-weight:500;
+  transition:all var(--transition);
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+}
+.nav-item::before{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(124,107,255,0.12),rgba(255,107,157,0.06));
+  opacity:0;
+  transition:opacity var(--transition);
+  border-radius:10px;
+}
+.nav-item:hover::before,.nav-item.active::before{opacity:1}
+.nav-item:hover,.nav-item.active{color:var(--text)}
+.nav-item.active{color:var(--accent);font-weight:700}
+.nav-item .nav-icon{
+  width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:8px;
+  font-size:15px;
+  background:rgba(255,255,255,0.04);
+  transition:background var(--transition);
+  flex-shrink:0;
+}
+.nav-item.active .nav-icon{background:rgba(124,107,255,0.2)}
+.nav-item .nav-badge{
+  margin-left:auto;
+  background:var(--accent2);
+  color:#fff;
+  font-size:10px;font-weight:700;
+  padding:1px 7px;border-radius:20px;
+  min-width:20px;text-align:center;
+}
+.sidebar-footer{
+  padding:16px 12px 20px;
+  border-top:1px solid var(--border);
+}
+.user-card{
+  display:flex;align-items:center;gap:10px;
+  padding:10px;
+  border-radius:12px;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  margin-bottom:12px;
+  cursor:pointer;
+  transition:border-color var(--transition);
+}
+.user-card:hover{border-color:var(--border-hover)}
+.avatar{
+  width:36px;height:36px;
+  border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:#fff;
+  flex-shrink:0;
+}
+.user-info{flex:1;min-width:0}
+.user-name{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-role{font-size:11px;color:var(--text2)}
+.theme-row{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;color:var(--text2);
+}
+.theme-toggle{
+  position:relative;
+  width:44px;height:24px;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:999px;
+  cursor:pointer;
+  transition:background var(--transition);
+  flex-shrink:0;
+}
+.theme-toggle.active{background:var(--accent)}
+.theme-knob{
+  position:absolute;
+  width:18px;height:18px;
+  background:#fff;
+  border-radius:50%;
+  top:2px;left:2px;
+  transition:transform var(--transition);
+  box-shadow:0 1px 4px rgba(0,0,0,0.3);
+}
+.theme-toggle.active .theme-knob{transform:translateX(20px)}
+
+/* ── MAIN ── */
+.main{
+  margin-left:var(--sidebar-w);
+  flex:1;
+  display:flex;flex-direction:column;
+  min-height:100vh;
+}
+.topbar{
+  display:flex;align-items:center;gap:16px;
+  padding:20px 32px;
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(12px);
+}
+.topbar-left{flex:1}
+.page-title{font-size:22px;font-weight:800;letter-spacing:-0.02em}
+.page-breadcrumb{font-size:12px;color:var(--text2);margin-top:1px}
+.topbar-actions{display:flex;align-items:center;gap:10px}
+.topbar-search{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px 14px;
+  font-size:13px;color:var(--text2);
+  cursor:pointer;
+  transition:border-color var(--transition);
+  font-family:inherit;
+}
+.topbar-search:hover{border-color:var(--border-hover)}
+.icon-btn{
+  width:38px;height:38px;
+  border-radius:10px;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text2);
+  cursor:pointer;
+  font-size:14px;
+  transition:all var(--transition);
+  position:relative;
+}
+.icon-btn:hover{border-color:var(--border-hover);color:var(--text)}
+.icon-btn .notif-dot{
+  position:absolute;top:6px;right:6px;
+  width:7px;height:7px;
+  background:var(--accent2);
+  border-radius:50%;
+  border:2px solid var(--bg2);
+}
+.period-select{
+  display:flex;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  font-size:12px;font-weight:600;
+}
+.period-btn{
+  padding:8px 14px;
+  cursor:pointer;
+  color:var(--text2);
+  border:none;background:none;
+  font-family:inherit;font-size:12px;font-weight:600;
+  transition:all var(--transition);
+  white-space:nowrap;
+}
+.period-btn.active{
+  background:var(--accent);
+  color:#fff;
+}
+
+/* ── CONTENT ── */
+.content{padding:28px 32px;flex:1}
+.section{display:none;animation:fadeUp 0.35s ease}
+.section.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── STAT CARDS ── */
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:24px;
+}
+.stat-card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--r2);
+  padding:20px;
+  position:relative;
+  overflow:hidden;
+  transition:border-color var(--transition), transform 0.2s;
+  cursor:default;
+}
+.stat-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--card-accent, var(--accent));
+  opacity:0.8;
+}
+.stat-card:hover{border-color:var(--border-hover);transform:translateY(-2px)}
+.stat-card.ig{--card-accent:var(--ig)}
+.stat-card.tw{--card-accent:var(--tw)}
+.stat-card.yt{--card-accent:var(--yt)}
+.stat-card.li{--card-accent:var(--li)}
+.stat-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.plat-icon{
+  width:38px;height:38px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;color:#fff;
+}
+.plat-icon.ig{background:linear-gradient(135deg,#833ab4,#e1306c,#f77737)}
+.plat-icon.tw{background:var(--tw)}
+.plat-icon.yt{background:var(--yt)}
+.plat-icon.li{background:var(--li)}
+.stat-badge{
+  font-size:11px;font-weight:700;
+  padding:3px 9px;border-radius:20px;
+  display:flex;align-items:center;gap:4px;
+}
+.stat-badge.up{background:rgba(34,197,94,0.12);color:var(--green)}
+.stat-badge.down{background:rgba(239,68,68,0.12);color:var(--red)}
+.stat-value{
+  font-size:32px;font-weight:900;letter-spacing:-0.03em;
+  line-height:1;margin-bottom:4px;
+}
+.stat-label{font-size:12px;color:var(--text2);font-weight:500;margin-bottom:16px}
+.stat-sparkline{height:44px;position:relative}
+.stat-sparkline canvas{width:100%!important;height:44px!important}
+
+/* ── ENGAGE STRIP ── */
+.engage-strip{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:24px;
+}
+.engage-card{
+  background:linear-gradient(135deg,var(--bg2),var(--bg3));
+  border:1px solid var(--border);
+  border-radius:var(--r2);
+  padding:20px 22px;
+  display:flex;flex-direction:column;gap:6px;
+  transition:border-color var(--transition);
+}
+.engage-card:hover{border-color:var(--border-hover)}
+.engage-label{font-size:11px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:0.08em}
+.engage-value{font-size:28px;font-weight:900;letter-spacing:-0.03em}
+.engage-badge{
+  font-size:11px;font-weight:600;
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 0;
+}
+.engage-badge.up{color:var(--green)}
+.engage-badge.down{color:var(--red)}
+.engage-badge.neutral{color:var(--text2)}
+
+/* ── CHART CARDS ── */
+.chart-row{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:16px;
+  margin-bottom:24px;
+}
+.chart-row-3{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:16px;
+}
+.chart-card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--r2);
+  padding:24px;
+  transition:border-color var(--transition);
+}
+.chart-card:hover{border-color:var(--border-hover)}
+.chart-card-title{
+  font-size:15px;font-weight:800;margin-bottom:4px;
+}
+.chart-card-sub{font-size:12px;color:var(--text2);margin-bottom:20px}
+.chart-card-header{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:20px;
+}
+.chart-legend{display:flex;gap:12px;flex-wrap:wrap}
+.leg{
+  display:flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:600;color:var(--text2);
+}
+.leg::before{
+  content:'';width:10px;height:10px;border-radius:3px;
+  background:var(--leg-color,var(--accent));
+  display:block;
+}
+.leg.ig{--leg-color:var(--ig)}
+.leg.tw{--leg-color:var(--tw)}
+.leg.yt{--leg-color:var(--yt)}
+.leg.li{--leg-color:var(--li)}
+.chart-wrap{position:relative;height:200px}
+.chart-wrap canvas{width:100%!important;height:100%!important}
+
+/* Donut */
+.donut-wrap{position:relative;height:180px;display:flex;align-items:center;justify-content:center}
+.donut-center{
+  position:absolute;
+  display:flex;flex-direction:column;align-items:center;
+  pointer-events:none;
+}
+.donut-total{font-size:26px;font-weight:900;letter-spacing:-0.03em}
+.donut-sub{font-size:11px;color:var(--text2);font-weight:600}
+.donut-legend{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.donut-legend li{
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;color:var(--text2);
+}
+.dl{
+  width:10px;height:10px;border-radius:3px;display:block;flex-shrink:0;
+}
+.dl.ig{background:var(--ig)}
+.dl.tw{background:var(--tw)}
+.dl.yt{background:var(--yt)}
+.dl.li{background:var(--li)}
+.donut-legend strong{margin-left:auto;color:var(--text);font-weight:700}
+.donut-bar-wrap{flex:1;height:4px;background:var(--bg3);border-radius:999px;overflow:hidden;margin-left:4px}
+.donut-bar-fill{height:100%;border-radius:999px;transition:width 1s ease}
+
+/* Weekly bars */
+.weekly-bars{
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+  height:140px;
+  padding-top:8px;
+}
+.wbar-col{
+  flex:1;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.wbar-track{
+  flex:1;
+  width:100%;
+  background:var(--bg3);
+  border-radius:6px;
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+}
+.wbar-fill{
+  position:absolute;bottom:0;left:0;right:0;
+  border-radius:6px;
+  transition:height 1s cubic-bezier(0.34,1.56,0.64,1);
+  background:linear-gradient(to top,var(--accent),var(--accent2));
+}
+.wbar-fill:hover{filter:brightness(1.2)}
+.wbar-label{font-size:10px;color:var(--text2);font-weight:600}
+.wbar-val{font-size:10px;color:var(--text2);font-family:'Instrument Mono',monospace}
+
+/* ── ANALYTICS ── */
+.analytics-layout{display:flex;flex-direction:column;gap:16px}
+.analytics-top{display:grid;grid-template-columns:3fr 1.4fr;gap:16px}
+.analytics-bottom{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.top-locations{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.location-item{display:flex;align-items:center;gap:10px;font-size:13px}
+.loc-name{width:80px;flex-shrink:0}
+.loc-track{flex:1;height:6px;background:var(--bg3);border-radius:999px;overflow:hidden}
+.loc-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 1.2s ease}
+.loc-pct{font-size:11px;color:var(--text2);width:32px;text-align:right;font-family:'Instrument Mono',monospace;font-weight:500}
+.age-bars{display:flex;align-items:flex-end;gap:8px;height:100px;margin-top:8px}
+.age-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.age-bar{width:100%;border-radius:4px;background:linear-gradient(to top,var(--accent),rgba(124,107,255,0.4));transition:height 1.2s cubic-bezier(0.34,1.56,0.64,1)}
+.age-lbl{font-size:10px;color:var(--text2)}
+.age-pct{font-size:10px;color:var(--text2);font-family:'Instrument Mono',monospace}
+
+/* Active hours grid */
+.hours-grid{
+  display:grid;
+  grid-template-columns:repeat(24,1fr);
+  gap:3px;
+  margin-top:8px;
+}
+.hour-cell{
+  height:28px;
+  border-radius:3px;
+  background:var(--bg3);
+  transition:background var(--transition);
+  cursor:pointer;
+  position:relative;
+}
+.hour-cell:hover::after{
+  content:attr(data-tip);
+  position:absolute;
+  bottom:calc(100% + 4px);
+  left:50%;transform:translateX(-50%);
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:4px 8px;
+  font-size:10px;white-space:nowrap;
+  color:var(--text);
+  pointer-events:none;
+  z-index:10;
+}
+.hours-labels{
+  display:flex;justify-content:space-between;
+  font-size:10px;color:var(--text3);margin-top:4px;
+}
+
+/* ── SCHEDULED ── */
+.scheduled-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
+.scheduled-header h2{font-size:20px;font-weight:800;letter-spacing:-0.02em}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--accent);
+  color:#fff;
+  border:none;border-radius:10px;
+  padding:10px 18px;
+  font-size:13px;font-weight:700;
+  cursor:pointer;
+  font-family:inherit;
+  transition:filter var(--transition), transform 0.15s;
+  box-shadow:0 4px 20px rgba(124,107,255,0.35);
+}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0)}
+.scheduled-filters{
+  display:flex;gap:8px;margin-bottom:16px;
+}
+.filter-btn{
+  padding:6px 14px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:none;
+  color:var(--text2);
+  font-size:12px;font-weight:600;
+  cursor:pointer;
+  font-family:inherit;
+  transition:all var(--transition);
+}
+.filter-btn.active,.filter-btn:hover{
+  background:rgba(124,107,255,0.12);
+  border-color:rgba(124,107,255,0.3);
+  color:var(--accent);
+}
+.scheduled-list{display:flex;flex-direction:column;gap:12px}
+.post-card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--r2);
+  padding:18px 20px;
+  display:flex;align-items:flex-start;gap:16px;
+  transition:border-color var(--transition), transform 0.2s;
+}
+.post-card:hover{border-color:var(--border-hover);transform:translateX(3px)}
+.post-plat-dot{
+  width:40px;height:40px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:#fff;flex-shrink:0;
+  margin-top:2px;
+}
+.post-plat-dot.ig{background:linear-gradient(135deg,#833ab4,#e1306c)}
+.post-plat-dot.tw{background:var(--tw)}
+.post-plat-dot.yt{background:var(--yt)}
+.post-plat-dot.li{background:var(--li)}
+.post-body{flex:1;min-width:0}
+.post-platform{font-size:11px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px}
+.post-caption{font-size:14px;font-weight:500;line-height:1.5;margin-bottom:8px}
+.post-meta{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--text2)}
+.post-meta i{font-size:11px}
+.post-status{
+  padding:2px 10px;border-radius:20px;
+  font-size:10px;font-weight:700;
+}
+.post-status.scheduled{background:rgba(124,107,255,0.12);color:var(--accent)}
+.post-status.draft{background:rgba(245,158,11,0.12);color:var(--amber)}
+.post-status.published{background:rgba(34,197,94,0.12);color:var(--green)}
+.post-actions{display:flex;gap:8px;align-items:center}
+.post-action-btn{
+  width:32px;height:32px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:none;
+  color:var(--text2);
+  font-size:13px;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all var(--transition);
+}
+.post-action-btn:hover{border-color:var(--red);color:var(--red)}
+.post-action-btn.edit:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── TOP CONTENT ── */
+.top-content-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
+.platform-tabs{
+  display:flex;gap:6px;
+}
+.ptab{
+  padding:7px 14px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:none;
+  color:var(--text2);
+  font-size:12px;font-weight:600;
+  cursor:pointer;
+  font-family:inherit;
+  transition:all var(--transition);
+  display:flex;align-items:center;gap:6px;
+}
+.ptab.active,.ptab:hover{
+  border-color:var(--ptab-color,var(--accent));
+  color:var(--ptab-color,var(--accent));
+  background:rgba(124,107,255,0.08);
+}
+.ptab.ig{--ptab-color:var(--ig)}
+.ptab.tw{--ptab-color:var(--tw)}
+.ptab.yt{--ptab-color:var(--yt)}
+.top-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+.content-card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--r2);
+  overflow:hidden;
+  transition:border-color var(--transition), transform 0.2s;
+  cursor:pointer;
+}
+.content-card:hover{border-color:var(--border-hover);transform:translateY(-3px)}
+.content-thumb{
+  height:140px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:48px;
+  position:relative;
+}
+.content-thumb .rank-badge{
+  position:absolute;top:10px;left:10px;
+  width:26px;height:26px;
+  background:var(--accent);
+  border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:900;color:#fff;
+}
+.content-body{padding:16px}
+.content-title{font-size:13px;font-weight:700;margin-bottom:6px;line-height:1.4}
+.content-stats{
+  display:flex;gap:14px;
+  font-size:11px;color:var(--text2);
+}
+.content-stats span{display:flex;align-items:center;gap:4px}
+.content-grow{
+  margin-top:10px;
+  display:flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:700;
+}
+.content-grow.up{color:var(--green)}
+.content-grow.down{color:var(--red)}
+
+/* ── MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.7);
+  backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  z-index:200;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.25s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:24px;
+  width:460px;max-width:95vw;
+  transform:translateY(20px) scale(0.97);
+  transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  overflow:hidden;
+}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+.modal-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 24px;
+  border-bottom:1px solid var(--border);
+}
+.modal-title{font-size:16px;font-weight:800}
+.modal-close{
+  width:32px;height:32px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:none;color:var(--text2);
+  font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all var(--transition);
+}
+.modal-close:hover{border-color:var(--red);color:var(--red)}
+.modal-body{padding:24px;display:flex;flex-direction:column;gap:16px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.06em}
+.form-control{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px 14px;
+  font-size:14px;color:var(--text);
+  font-family:inherit;
+  transition:border-color var(--transition);
+  outline:none;
+  width:100%;
+}
+.form-control:focus{border-color:var(--accent)}
+textarea.form-control{resize:vertical;min-height:80px}
+.plat-selector{display:flex;gap:8px}
+.plat-opt{
+  flex:1;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--bg3);
+  padding:10px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  cursor:pointer;
+  transition:all var(--transition);
+  font-size:11px;font-weight:700;color:var(--text2);
+}
+.plat-opt i{font-size:20px}
+.plat-opt:hover,.plat-opt.selected{border-color:var(--plat-c,var(--accent));color:var(--plat-c,var(--accent));background:rgba(124,107,255,0.06)}
+.plat-opt.ig-opt{--plat-c:var(--ig)}
+.plat-opt.tw-opt{--plat-c:var(--tw)}
+.plat-opt.yt-opt{--plat-c:var(--yt)}
+.plat-opt.li-opt{--plat-c:var(--li)}
+.char-count{font-size:11px;color:var(--text2);text-align:right;font-family:'Instrument Mono',monospace}
+.modal-footer{
+  padding:16px 24px 20px;
+  display:flex;gap:10px;
+}
+.btn-ghost{
+  flex:1;
+  padding:10px;
+  border:1px solid var(--border);
+  background:none;
+  border-radius:10px;
+  font-family:inherit;font-size:13px;font-weight:700;
+  color:var(--text2);cursor:pointer;
+  transition:all var(--transition);
+}
+.btn-ghost:hover{border-color:var(--border-hover);color:var(--text)}
+.btn-primary-full{
+  flex:2;
+  padding:10px;
+  background:var(--accent);
+  border:none;border-radius:10px;
+  color:#fff;
+  font-family:inherit;font-size:13px;font-weight:700;
+  cursor:pointer;
+  transition:filter var(--transition);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 4px 20px rgba(124,107,255,0.35);
+}
+.btn-primary-full:hover{filter:brightness(1.12)}
+
+/* ── TOAST ── */
+.toast-container{
+  position:fixed;bottom:24px;right:24px;
+  z-index:300;
+  display:flex;flex-direction:column;gap:8px;
+  pointer-events:none;
+}
+.toast{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px 16px;
+  display:flex;align-items:center;gap:10px;
+  font-size:13px;font-weight:600;
+  box-shadow:var(--shadow);
+  animation:toastIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  max-width:320px;
+}
+.toast.leaving{animation:toastOut 0.3s ease forwards}
+.toast-icon{font-size:16px}
+.toast.success .toast-icon{color:var(--green)}
+.toast.error .toast-icon{color:var(--red)}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes toastOut{to{opacity:0;transform:translateX(40px)}}
+
+/* ── EMPTY STATES ── */
+.empty-state{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:12px;padding:60px 20px;
+  color:var(--text2);
+  border:1px dashed var(--border);
+  border-radius:var(--r2);
+}
+.empty-state i{font-size:40px;opacity:0.3}
+.empty-state p{font-size:14px}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:999px}
+::-webkit-scrollbar-thumb:hover{background:var(--border-hover)}
+
+/* ── MOBILE TOGGLE ── */
+.hamburger{
+  display:none;
+  position:fixed;top:16px;left:16px;
+  z-index:150;
+  width:38px;height:38px;
+  border-radius:10px;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  align-items:center;justify-content:center;
+  font-size:16px;cursor:pointer;color:var(--text);
+}
+.sidebar-overlay{
+  display:none;
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.6);
+  z-index:90;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .engage-strip{grid-template-columns:repeat(2,1fr)}
+  .chart-row{grid-template-columns:1fr}
+  .analytics-top{grid-template-columns:1fr}
+  .analytics-bottom{grid-template-columns:1fr}
+  .top-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:768px){
+  .hamburger{display:flex}
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay.open{display:block}
+  .main{margin-left:0}
+  .topbar{padding:16px 20px;padding-left:64px}
+  .content{padding:20px 16px}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .engage-strip{grid-template-columns:1fr 1fr}
+  .top-grid{grid-template-columns:1fr}
+  .period-select{display:none}
+  .topbar-search{display:none}
+  .chart-row-3{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .stat-grid{grid-template-columns:1fr}
+  .engage-strip{grid-template-columns:1fr}
+  .platform-tabs{flex-wrap:wrap}
+}
+
+/* LOADING SHIMMER */
+.shimmer{
+  background:linear-gradient(90deg,var(--bg3) 25%,var(--bg2) 50%,var(--bg3) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.5s infinite;
+  border-radius:6px;
+}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* NUMBER FONT */
+.mono{font-family:'Instrument Mono',monospace}
+</style>
 </head>
 <body>
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="logo">
-      <span class="logo-dot"></span>
-      <span class="logo-text">PULSE</span>
+<!-- Hamburger -->
+<button class="hamburger" id="hamburger" aria-label="Open menu">
+  <i class="fa-solid fa-bars"></i>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="logo">
+    <div class="logo-pulse"></div>
+    <span class="logo-text">PULSE</span>
+    <span class="logo-badge">PRO</span>
+  </div>
+  <nav class="nav">
+    <div class="nav-group-label">Menu</div>
+    <a class="nav-item active" data-section="overview">
+      <span class="nav-icon"><i class="fa-solid fa-house-chimney"></i></span>
+      Overview
+    </a>
+    <a class="nav-item" data-section="analytics">
+      <span class="nav-icon"><i class="fa-solid fa-chart-line"></i></span>
+      Analytics
+    </a>
+    <a class="nav-item" data-section="scheduled">
+      <span class="nav-icon"><i class="fa-solid fa-calendar-days"></i></span>
+      Scheduled
+      <span class="nav-badge" id="scheduledCount">3</span>
+    </a>
+    <a class="nav-item" data-section="top-content">
+      <span class="nav-icon"><i class="fa-solid fa-star"></i></span>
+      Top Content
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="avatar">MY</div>
+      <div class="user-info">
+        <div class="user-name">Mukesh Yadav</div>
+        <div class="user-role">Content Creator</div>
+      </div>
+      <i class="fa-solid fa-ellipsis" style="color:var(--text2);font-size:13px"></i>
     </div>
-    <nav class="nav">
-      <a href="#" class="nav-item active" data-section="overview">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        Overview
-      </a>
-      <a href="#" class="nav-item" data-section="analytics">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        Analytics
-      </a>
-      <a href="#" class="nav-item" data-section="scheduled">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        Scheduled
-      </a>
-      <a href="#" class="nav-item" data-section="top-content">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        Top Content
-      </a>
-    </nav>
-    <div class="sidebar-footer">
-      <div class="theme-toggle-wrap">
-        <span>Dark</span>
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-          <span class="toggle-knob"></span>
-        </button>
-        <span>Light</span>
-      </div>
+    <div class="theme-row">
+      <i class="fa-solid fa-moon" style="font-size:12px"></i>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <div class="theme-knob"></div>
+      </button>
+      <i class="fa-solid fa-sun" style="font-size:12px"></i>
     </div>
-  </aside>
+  </div>
+</aside>
 
-  <!-- MAIN -->
-  <main class="main">
-
-    <!-- TOPBAR -->
-    <header class="topbar">
-      <div class="topbar-left">
-        <h1 class="page-title" id="pageTitle">Overview</h1>
-        <p class="page-sub">Last updated: <span id="lastUpdated"></span></p>
+<!-- MAIN -->
+<main class="main">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <h1 class="page-title" id="pageTitle">Overview</h1>
+      <p class="page-breadcrumb">Dashboard / <span id="pageSub">Overview</span></p>
+    </div>
+    <div class="topbar-actions">
+      <div class="period-select">
+        <button class="period-btn active" data-period="7">7D</button>
+        <button class="period-btn" data-period="30">30D</button>
+        <button class="period-btn" data-period="90">90D</button>
       </div>
-      <div class="topbar-right">
-        <div class="profile">
-          <div class="avatar">MY</div>
-          <div>
-            <p class="profile-name">MUKESH yadav</p>
-            <p class="profile-role">Content Creator</p>
-          </div>
-        </div>
-      </div>
-    </header>
+      <button class="icon-btn" id="refreshBtn" title="Refresh data">
+        <i class="fa-solid fa-arrows-rotate"></i>
+      </button>
+      <button class="icon-btn" title="Notifications">
+        <i class="fa-solid fa-bell"></i>
+        <span class="notif-dot"></span>
+      </button>
+      <button class="icon-btn" id="exportBtn" title="Export data">
+        <i class="fa-solid fa-download"></i>
+      </button>
+    </div>
+  </header>
 
-    <!-- ========== OVERVIEW ========== -->
+  <div class="content">
+
+    <!-- ====== OVERVIEW ====== -->
     <section id="overview" class="section active">
-
+      <!-- Stat Cards -->
       <div class="stat-grid">
-        <div class="stat-card">
+        <div class="stat-card ig">
           <div class="stat-header">
-            <span class="platform-icon ig">IG</span>
-            <span class="stat-badge up">+4.2%</span>
+            <div class="plat-icon ig"><i class="fa-brands fa-instagram"></i></div>
+            <span class="stat-badge up"><i class="fa-solid fa-arrow-trend-up"></i>+4.2%</span>
           </div>
-          <h2 class="stat-value" data-target="128400">0</h2>
-          <p class="stat-label">Instagram Followers</p>
-          <div class="stat-bar"><div class="stat-bar-fill" style="width:72%"></div></div>
+          <div class="stat-value" data-target="128400">0</div>
+          <div class="stat-label">Instagram Followers</div>
+          <div class="stat-sparkline"><canvas id="spark-ig"></canvas></div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card tw">
           <div class="stat-header">
-            <span class="platform-icon tw">TW</span>
-            <span class="stat-badge up">+2.1%</span>
+            <div class="plat-icon tw"><i class="fa-brands fa-x-twitter"></i></div>
+            <span class="stat-badge up"><i class="fa-solid fa-arrow-trend-up"></i>+2.1%</span>
           </div>
-          <h2 class="stat-value" data-target="84700">0</h2>
-          <p class="stat-label">Twitter Followers</p>
-          <div class="stat-bar"><div class="stat-bar-fill" style="width:55%"></div></div>
+          <div class="stat-value" data-target="84700">0</div>
+          <div class="stat-label">X / Twitter Followers</div>
+          <div class="stat-sparkline"><canvas id="spark-tw"></canvas></div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card yt">
           <div class="stat-header">
-            <span class="platform-icon yt">YT</span>
-            <span class="stat-badge down">-0.8%</span>
+            <div class="plat-icon yt"><i class="fa-brands fa-youtube"></i></div>
+            <span class="stat-badge down"><i class="fa-solid fa-arrow-trend-down"></i>-0.8%</span>
           </div>
-          <h2 class="stat-value" data-target="52300">0</h2>
-          <p class="stat-label">YouTube Subscribers</p>
-          <div class="stat-bar"><div class="stat-bar-fill" style="width:38%"></div></div>
+          <div class="stat-value" data-target="52300">0</div>
+          <div class="stat-label">YouTube Subscribers</div>
+          <div class="stat-sparkline"><canvas id="spark-yt"></canvas></div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card li">
           <div class="stat-header">
-            <span class="platform-icon li">LI</span>
-            <span class="stat-badge up">+6.5%</span>
+            <div class="plat-icon li"><i class="fa-brands fa-linkedin-in"></i></div>
+            <span class="stat-badge up"><i class="fa-solid fa-arrow-trend-up"></i>+6.5%</span>
           </div>
-          <h2 class="stat-value" data-target="31200">0</h2>
-          <p class="stat-label">LinkedIn Connections</p>
-          <div class="stat-bar"><div class="stat-bar-fill" style="width:25%"></div></div>
+          <div class="stat-value" data-target="31200">0</div>
+          <div class="stat-label">LinkedIn Connections</div>
+          <div class="stat-sparkline"><canvas id="spark-li"></canvas></div>
         </div>
       </div>
 
-      <div class="engage-grid">
+      <!-- Engage Strip -->
+      <div class="engage-strip">
         <div class="engage-card">
-          <p class="engage-label">Total Reach</p>
-          <h3 class="engage-value" data-target="2480000">0</h3>
-          <span class="engage-badge up">↑ 11.3% this week</span>
+          <div class="engage-label">Total Reach</div>
+          <div class="engage-value" data-target="2480000">0</div>
+          <div class="engage-badge up"><i class="fa-solid fa-arrow-up"></i>11.3% this week</div>
         </div>
         <div class="engage-card">
-          <p class="engage-label">Avg. Engagement Rate</p>
-          <h3 class="engage-value">4.7%</h3>
-          <span class="engage-badge up">↑ 0.4% vs last week</span>
+          <div class="engage-label">Avg. Engagement Rate</div>
+          <div class="engage-value">4.7%</div>
+          <div class="engage-badge up"><i class="fa-solid fa-arrow-up"></i>0.4% vs last week</div>
         </div>
         <div class="engage-card">
-          <p class="engage-label">Posts Published</p>
-          <h3 class="engage-value" data-target="134">0</h3>
-          <span class="engage-badge neutral">This month</span>
+          <div class="engage-label">Posts Published</div>
+          <div class="engage-value" data-target="134">0</div>
+          <div class="engage-badge neutral"><i class="fa-regular fa-calendar"></i>This month</div>
         </div>
         <div class="engage-card">
-          <p class="engage-label">Impressions</p>
-          <h3 class="engage-value" data-target="9200000">0</h3>
-          <span class="engage-badge down">↓ 2.1% vs last week</span>
+          <div class="engage-label">Impressions</div>
+          <div class="engage-value" data-target="9200000">0</div>
+          <div class="engage-badge down"><i class="fa-solid fa-arrow-down"></i>2.1% vs last week</div>
         </div>
       </div>
-    </section>
 
-    <!-- ========== ANALYTICS ========== -->
-    <section id="analytics" class="section">
-      <div class="analytics-layout">
-
-        <div class="chart-card wide">
+      <!-- Charts Row -->
+      <div class="chart-row">
+        <div class="chart-card">
           <div class="chart-card-header">
-            <h3>Follower Growth — Last 6 Months</h3>
+            <div>
+              <div class="chart-card-title">Follower Growth</div>
+              <div class="chart-card-sub">Last 6 months across platforms</div>
+            </div>
             <div class="chart-legend">
               <span class="leg ig">Instagram</span>
               <span class="leg tw">Twitter</span>
               <span class="leg yt">YouTube</span>
             </div>
           </div>
-          <div class="chart-wrap">
-            <canvas id="growthChart"></canvas>
-          </div>
+          <div class="chart-wrap"><canvas id="growthChart"></canvas></div>
         </div>
-
         <div class="chart-card">
-          <h3>Platform Split</h3>
+          <div class="chart-card-header">
+            <div>
+              <div class="chart-card-title">Platform Split</div>
+              <div class="chart-card-sub">Audience distribution</div>
+            </div>
+          </div>
           <div class="donut-wrap">
             <canvas id="donutChart"></canvas>
             <div class="donut-center">
@@ -158,65 +1062,667 @@
             </div>
           </div>
           <ul class="donut-legend">
-            <li><span class="dl ig"></span>Instagram <strong>43%</strong></li>
-            <li><span class="dl tw"></span>Twitter <strong>29%</strong></li>
-            <li><span class="dl yt"></span>YouTube <strong>18%</strong></li>
-            <li><span class="dl li"></span>LinkedIn <strong>10%</strong></li>
+            <li><span class="dl ig"></span>Instagram<div class="donut-bar-wrap"><div class="donut-bar-fill" style="width:43%;background:var(--ig)"></div></div><strong>43%</strong></li>
+            <li><span class="dl tw"></span>Twitter<div class="donut-bar-wrap"><div class="donut-bar-fill" style="width:29%;background:var(--tw)"></div></div><strong>29%</strong></li>
+            <li><span class="dl yt"></span>YouTube<div class="donut-bar-wrap"><div class="donut-bar-fill" style="width:18%;background:var(--yt)"></div></div><strong>18%</strong></li>
+            <li><span class="dl li"></span>LinkedIn<div class="donut-bar-wrap"><div class="donut-bar-fill" style="width:10%;background:var(--li)"></div></div><strong>10%</strong></li>
           </ul>
         </div>
+      </div>
 
-        <div class="chart-card">
-          <h3>Weekly Engagement</h3>
-          <div class="bar-chart" id="weeklyBars"></div>
+      <!-- Weekly Engagement -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div>
+            <div class="chart-card-title">Weekly Engagement</div>
+            <div class="chart-card-sub">Likes, comments & shares combined</div>
+          </div>
         </div>
-
+        <div class="weekly-bars" id="weeklyBars"></div>
       </div>
     </section>
 
-    <!-- ========== SCHEDULED ========== -->
+    <!-- ====== ANALYTICS ====== -->
+    <section id="analytics" class="section">
+      <div class="analytics-layout">
+        <div class="analytics-top">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">Engagement Over Time</div>
+                <div class="chart-card-sub">Daily engagement rate — last 30 days</div>
+              </div>
+              <div class="chart-legend">
+                <span class="leg ig">Instagram</span>
+                <span class="leg tw">Twitter</span>
+                <span class="leg li">LinkedIn</span>
+              </div>
+            </div>
+            <div class="chart-wrap" style="height:220px"><canvas id="engageChart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card-title">Top Locations</div>
+            <div class="chart-card-sub" style="margin-bottom:16px">By audience percentage</div>
+            <div class="top-locations" id="topLocations"></div>
+          </div>
+        </div>
+        <div class="analytics-bottom">
+          <div class="chart-card">
+            <div class="chart-card-title">Age Distribution</div>
+            <div class="chart-card-sub" style="margin-bottom:16px">Audience by age group</div>
+            <div class="age-bars" id="ageBars"></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card-title">Active Hours</div>
+            <div class="chart-card-sub" style="margin-bottom:16px">When your audience is online</div>
+            <div class="hours-grid" id="hoursGrid"></div>
+            <div class="hours-labels">
+              <span>12am</span><span>6am</span><span>12pm</span><span>6pm</span><span>11pm</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== SCHEDULED ====== -->
     <section id="scheduled" class="section">
       <div class="scheduled-header">
         <h2>Upcoming Posts</h2>
-        <button class="btn-new" id="openModal">+ New Post</button>
+        <button class="btn-primary" id="openModal">
+          <i class="fa-solid fa-plus"></i> New Post
+        </button>
+      </div>
+      <div class="scheduled-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="scheduled">Scheduled</button>
+        <button class="filter-btn" data-filter="draft">Draft</button>
+        <button class="filter-btn" data-filter="published">Published</button>
       </div>
       <div class="scheduled-list" id="scheduledList"></div>
     </section>
 
-    <!-- ========== TOP CONTENT ========== -->
+    <!-- ====== TOP CONTENT ====== -->
     <section id="top-content" class="section">
-      <h2 class="section-heading">Top Performing Content</h2>
+      <div class="top-content-header">
+        <h2 style="font-size:20px;font-weight:800">Top Performing Content</h2>
+        <div class="platform-tabs">
+          <button class="ptab active" data-plat="all">All</button>
+          <button class="ptab ig" data-plat="ig"><i class="fa-brands fa-instagram"></i>Instagram</button>
+          <button class="ptab tw" data-plat="tw"><i class="fa-brands fa-x-twitter"></i>Twitter</button>
+          <button class="ptab yt" data-plat="yt"><i class="fa-brands fa-youtube"></i>YouTube</button>
+        </div>
+      </div>
       <div class="top-grid" id="topGrid"></div>
     </section>
 
-  </main>
+  </div>
+</main>
 
-  <!-- MODAL -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal">
-      <div class="modal-header">
-        <h3>Schedule New Post</h3>
-        <button class="modal-close" id="closeModal">✕</button>
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Schedule New Post</div>
+      <button class="modal-close" id="closeModal"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="form-label">Platform</div>
+        <div class="plat-selector" id="platSelector">
+          <div class="plat-opt ig-opt selected" data-plat="Instagram">
+            <i class="fa-brands fa-instagram" style="color:var(--ig)"></i>Instagram
+          </div>
+          <div class="plat-opt tw-opt" data-plat="Twitter">
+            <i class="fa-brands fa-x-twitter" style="color:var(--tw)"></i>Twitter
+          </div>
+          <div class="plat-opt yt-opt" data-plat="YouTube">
+            <i class="fa-brands fa-youtube" style="color:var(--yt)"></i>YouTube
+          </div>
+          <div class="plat-opt li-opt" data-plat="LinkedIn">
+            <i class="fa-brands fa-linkedin-in" style="color:var(--li)"></i>LinkedIn
+          </div>
+        </div>
       </div>
-      <div class="modal-body">
-        <label>Platform
-          <select id="newPlatform">
-            <option>Instagram</option>
-            <option>Twitter</option>
-            <option>YouTube</option>
-            <option>LinkedIn</option>
-          </select>
-        </label>
-        <label>Caption
-          <textarea id="newCaption" rows="3" placeholder="Write your caption…"></textarea>
-        </label>
-        <label>Schedule Date &amp; Time
-          <input type="datetime-local" id="newDate" />
-        </label>
-        <button class="btn-save" id="savePost">Schedule Post</button>
+      <div class="form-group">
+        <div class="form-label">Caption</div>
+        <textarea class="form-control" id="newCaption" rows="3" placeholder="Write your caption…" maxlength="280"></textarea>
+        <div class="char-count"><span id="charLeft">280</span> characters left</div>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Post Type</div>
+        <select class="form-control" id="postType">
+          <option>📸 Photo</option>
+          <option>🎥 Video</option>
+          <option>📖 Story</option>
+          <option>🧵 Thread</option>
+          <option>📄 Article</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Schedule Date & Time</div>
+        <input type="datetime-local" class="form-control" id="newDate"/>
       </div>
     </div>
+    <div class="modal-footer">
+      <button class="btn-ghost" id="saveDraft">Save Draft</button>
+      <button class="btn-primary-full" id="savePost">
+        <i class="fa-solid fa-paper-plane"></i> Schedule Post
+      </button>
+    </div>
   </div>
+</div>
 
-  <script src="js/app.js"></script>
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────
+const DATA = {
+  growth: {
+    labels: ['Nov','Dec','Jan','Feb','Mar','Apr'],
+    ig:  [108000,112000,116000,120000,124000,128400],
+    tw:  [78000, 79500, 81000, 82200, 83800, 84700],
+    yt:  [55000, 54200, 53800, 53000, 52600, 52300],
+  },
+  engage: {
+    labels: Array.from({length:30},(_,i)=>{const d=new Date();d.setDate(d.getDate()-29+i);return d.toLocaleDateString('en',{month:'short',day:'numeric'})}),
+    ig: Array.from({length:30},()=>(3+Math.random()*4).toFixed(2)),
+    tw: Array.from({length:30},()=>(2+Math.random()*3).toFixed(2)),
+    li: Array.from({length:30},()=>(1.5+Math.random()*2.5).toFixed(2)),
+  },
+  sparklines:{
+    ig:[120,115,130,128,140,135,145,150,148,160,155,165,170,168,175,180,178,185,190,195,192,200,205,210,208,215,220,218,225,128400/600],
+    tw:[80,82,85,83,90,88,92,95,93,97,100,98,102,105,103,108,110,108,112,115,113,118,120,122,120,125,128,130,128,84700/640],
+    yt:[60,58,56,57,55,54,53,55,52,51,53,50,52,51,53,52,50,51,52,50,51,52,51,53,52,51,52,53,52,52300/1000],
+    li:[28,29,30,29,31,30,32,31,33,32,33,34,33,35,34,35,36,35,37,36,38,37,39,38,40,39,41,40,42,31200/750],
+  },
+  weekly:[
+    {day:'Mon',val:68},{day:'Tue',val:82},{day:'Wed',val:91},{day:'Thu',val:75},{day:'Fri',val:95},{day:'Sat',val:110},{day:'Sun',val:78}
+  ],
+  locations:[
+    {name:'India',pct:34},{name:'USA',pct:22},{name:'UK',pct:12},{name:'Canada',pct:9},{name:'Australia',pct:7}
+  ],
+  ages:[
+    {grp:'13-17',pct:8},{grp:'18-24',pct:32},{grp:'25-34',pct:38},{grp:'35-44',pct:14},{grp:'45-54',pct:6},{grp:'55+',pct:2}
+  ],
+  hours: [2,1,1,0,0,1,3,7,12,18,22,25,28,30,27,24,26,29,32,35,28,20,14,8],
+  posts:[
+    {id:1,platform:'Instagram',icon:'fa-instagram',cls:'ig',caption:'🌅 Morning vibes are everything. Starting this week with purpose and positive energy. What\'s your morning ritual?',date:'2026-04-10T08:00',type:'📸 Photo',status:'scheduled'},
+    {id:2,platform:'Twitter',icon:'fa-x-twitter',cls:'tw',caption:'Consistency > Motivation. You don\'t wait to feel ready — you just do it. Thread incoming 🧵',date:'2026-04-11T14:30',type:'🧵 Thread',status:'scheduled'},
+    {id:3,platform:'YouTube',icon:'fa-youtube',cls:'yt',caption:'New video: "How I gained 10K subscribers in 30 days" — Real strategy, no fluff.',date:'2026-04-12T18:00',type:'🎥 Video',status:'draft'},
+    {id:4,platform:'LinkedIn',icon:'fa-linkedin-in',cls:'li',caption:'Excited to share that our creator community just crossed 100K members! What a journey.',date:'2026-04-08T09:00',type:'📄 Article',status:'published'},
+  ],
+  topContent:[
+    {plat:'ig',emoji:'📸',title:'Morning Routine That Changed My Life',likes:'42.1K',comments:'1.2K',shares:'3.4K',growth:'+28%',dir:'up',bg:'linear-gradient(135deg,#833ab4,#e1306c)'},
+    {plat:'yt',emoji:'🎬',title:'Full Day Of Eating — 2500 Calorie Challenge',likes:'38.5K',comments:'892',shares:'2.1K',growth:'+19%',dir:'up',bg:'linear-gradient(135deg,#cc0000,#ff0000)'},
+    {plat:'tw',emoji:'🧵',title:'10 productivity habits I wish I knew at 20 (thread)',likes:'29.8K',comments:'4.1K',shares:'12.3K',growth:'+44%',dir:'up',bg:'linear-gradient(135deg,#0d7fbc,#1d9bf0)'},
+    {plat:'ig',emoji:'🌿',title:'Minimalist home setup tour — Less is more',likes:'24.2K',comments:'643',shares:'1.8K',growth:'+12%',dir:'up',bg:'linear-gradient(135deg,#6b3fa0,#e1306c)'},
+    {plat:'yt',emoji:'💡',title:'I tried waking up at 5am for 30 days — here\'s what happened',likes:'19.7K',comments:'1.5K',shares:'4.2K',growth:'-3%',dir:'down',bg:'linear-gradient(135deg,#990000,#cc0000)'},
+    {plat:'tw',emoji:'📊',title:'The algorithm is NOT what you think. Here\'s the data.',likes:'18.3K',comments:'2.8K',shares:'9.1K',growth:'+31%',dir:'up',bg:'linear-gradient(135deg,#0a6090,#1d9bf0)'},
+  ]
+};
+
+// ── UTILS ─────────────────────────────────────────────
+function fmtNum(n){
+  if(n>=1e6) return (n/1e6).toFixed(1)+'M';
+  if(n>=1e3) return (n/1e3).toFixed(1)+'K';
+  return n.toString();
+}
+
+function animateCount(el,target,duration=1400){
+  const start=performance.now();
+  const from=0;
+  function tick(now){
+    const t=Math.min((now-start)/duration,1);
+    const ease=t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+    const val=Math.round(from+(target-from)*ease);
+    el.textContent=fmtNum(val);
+    if(t<1) requestAnimationFrame(tick);
+    else el.textContent=fmtNum(target);
+  }
+  requestAnimationFrame(tick);
+}
+
+function showToast(msg,type='success'){
+  const c=document.getElementById('toastContainer');
+  const t=document.createElement('div');
+  t.className=`toast ${type}`;
+  t.innerHTML=`<span class="toast-icon"><i class="fa-solid ${type==='success'?'fa-circle-check':'fa-circle-xmark'}"></i></span>${msg}`;
+  c.appendChild(t);
+  setTimeout(()=>{t.classList.add('leaving');setTimeout(()=>t.remove(),300)},3000);
+}
+
+// ── NAV ───────────────────────────────────────────────
+const navItems=document.querySelectorAll('.nav-item');
+const sections=document.querySelectorAll('.section');
+const pageTitle=document.getElementById('pageTitle');
+const pageSub=document.getElementById('pageSub');
+
+navItems.forEach(item=>{
+  item.addEventListener('click',e=>{
+    e.preventDefault();
+    const sec=item.dataset.section;
+    navItems.forEach(n=>n.classList.remove('active'));
+    sections.forEach(s=>s.classList.remove('active'));
+    item.classList.add('active');
+    document.getElementById(sec).classList.add('active');
+    const title=item.querySelector('[class="nav-icon"] + *') ? item.textContent.trim() : sec;
+    const names={overview:'Overview',analytics:'Analytics',scheduled:'Scheduled',['top-content']:'Top Content'};
+    pageTitle.textContent=names[sec]||sec;
+    pageSub.textContent=names[sec]||sec;
+    // close mobile sidebar
+    sidebar.classList.remove('open');
+    sidebarOverlay.classList.remove('open');
+  });
+});
+
+// ── MOBILE SIDEBAR ────────────────────────────────────
+const sidebar=document.getElementById('sidebar');
+const hamburger=document.getElementById('hamburger');
+const sidebarOverlay=document.getElementById('sidebarOverlay');
+hamburger.addEventListener('click',()=>{
+  sidebar.classList.toggle('open');
+  sidebarOverlay.classList.toggle('open');
+});
+sidebarOverlay.addEventListener('click',()=>{
+  sidebar.classList.remove('open');
+  sidebarOverlay.classList.remove('open');
+});
+
+// ── THEME ─────────────────────────────────────────────
+const themeToggle=document.getElementById('themeToggle');
+let isDark=true;
+themeToggle.addEventListener('click',()=>{
+  isDark=!isDark;
+  document.documentElement.setAttribute('data-theme',isDark?'dark':'light');
+  themeToggle.classList.toggle('active',!isDark);
+});
+
+// ── PERIOD SELECT ─────────────────────────────────────
+document.querySelectorAll('.period-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    showToast(`Showing data for last ${btn.dataset.period} days`);
+  });
+});
+
+// ── REFRESH ───────────────────────────────────────────
+document.getElementById('refreshBtn').addEventListener('click',function(){
+  this.querySelector('i').style.animation='spin 0.6s linear';
+  setTimeout(()=>{this.querySelector('i').style.animation='';},600);
+  showToast('Data refreshed successfully');
+});
+
+// ── EXPORT ────────────────────────────────────────────
+document.getElementById('exportBtn').addEventListener('click',()=>{
+  const blob=new Blob([JSON.stringify({stats:{ig:128400,tw:84700,yt:52300,li:31200},posts:DATA.posts},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='pulse-dashboard.json';a.click();
+  showToast('Dashboard data exported');
+});
+
+// ── CANVAS HELPERS ────────────────────────────────────
+function getCSS(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()}
+
+function drawSparkline(id,data,color){
+  const canvas=document.getElementById(id);
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  canvas.width=canvas.offsetWidth*2||240;
+  canvas.height=88;
+  const W=canvas.width,H=canvas.height,P=4;
+  const mn=Math.min(...data),mx=Math.max(...data);
+  const pts=data.map((v,i)=>({
+    x:P+(i/(data.length-1))*(W-P*2),
+    y:H-P-(v-mn)/(mx-mn||1)*(H-P*2)
+  }));
+  // gradient fill
+  const grad=ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,color+'66');
+  grad.addColorStop(1,color+'00');
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x,H);
+  pts.forEach(p=>ctx.lineTo(p.x,p.y));
+  ctx.lineTo(pts[pts.length-1].x,H);
+  ctx.closePath();
+  ctx.fillStyle=grad;
+  ctx.fill();
+  // line
+  ctx.beginPath();
+  pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+  ctx.strokeStyle=color;
+  ctx.lineWidth=2.5;
+  ctx.lineJoin='round';
+  ctx.stroke();
+}
+
+function drawLineChart(id,labels,datasets){
+  const canvas=document.getElementById(id);
+  if(!canvas)return;
+  const parent=canvas.parentElement;
+  canvas.width=parent.offsetWidth*2||800;
+  canvas.height=parent.offsetHeight*2||400;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  const PL=60,PR=20,PT=20,PB=40;
+  const chartW=W-PL-PR,chartH=H-PT-PB;
+  ctx.clearRect(0,0,W,H);
+  // axis color
+  const textColor=isDark?'rgba(255,255,255,0.25)':'rgba(0,0,0,0.2)';
+  const textFill=isDark?'rgba(255,255,255,0.45)':'rgba(0,0,0,0.4)';
+  // grid
+  const allVals=datasets.flatMap(d=>d.data.map(Number));
+  const mn=Math.min(...allVals),mx=Math.max(...allVals);
+  const range=mx-mn||1;
+  const steps=5;
+  for(let i=0;i<=steps;i++){
+    const y=PT+chartH-(i/steps)*chartH;
+    ctx.beginPath();ctx.moveTo(PL,y);ctx.lineTo(PL+chartW,y);
+    ctx.strokeStyle=textColor;ctx.lineWidth=1;ctx.stroke();
+    const val=mn+(i/steps)*range;
+    ctx.fillStyle=textFill;ctx.font=`${22}px 'Cabinet Grotesk',sans-serif`;ctx.textAlign='right';
+    ctx.fillText(fmtNum(Math.round(val)),PL-8,y+6);
+  }
+  // x labels
+  ctx.font=`${20}px 'Cabinet Grotesk',sans-serif`;ctx.fillStyle=textFill;ctx.textAlign='center';
+  labels.forEach((l,i)=>{
+    const x=PL+(i/(labels.length-1))*chartW;
+    ctx.fillText(l,x,H-8);
+  });
+  // lines
+  datasets.forEach(ds=>{
+    const pts=ds.data.map((v,i)=>({
+      x:PL+(i/(ds.data.length-1))*chartW,
+      y:PT+chartH-((Number(v)-mn)/range)*chartH
+    }));
+    // fill
+    const grad=ctx.createLinearGradient(0,PT,0,PT+chartH);
+    grad.addColorStop(0,ds.color+'44');grad.addColorStop(1,ds.color+'00');
+    ctx.beginPath();ctx.moveTo(pts[0].x,PT+chartH);
+    pts.forEach(p=>ctx.lineTo(p.x,p.y));
+    ctx.lineTo(pts[pts.length-1].x,PT+chartH);ctx.closePath();
+    ctx.fillStyle=grad;ctx.fill();
+    // line
+    ctx.beginPath();
+    pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+    ctx.strokeStyle=ds.color;ctx.lineWidth=3;ctx.lineJoin='round';ctx.stroke();
+    // dots
+    pts.forEach(p=>{
+      ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);
+      ctx.fillStyle=ds.color;ctx.fill();
+      ctx.strokeStyle='var(--bg2)';ctx.lineWidth=2;ctx.stroke();
+    });
+  });
+}
+
+function drawDonut(id,data){
+  const canvas=document.getElementById(id);
+  if(!canvas)return;
+  const sz=Math.min(canvas.parentElement.offsetWidth,180);
+  canvas.width=sz*2;canvas.height=sz*2;
+  canvas.style.width=sz+'px';canvas.style.height=sz+'px';
+  const ctx=canvas.getContext('2d');
+  const cx=canvas.width/2,cy=canvas.height/2,r=cx*0.85,inner=cx*0.56;
+  let start=-Math.PI/2;
+  const colors=[getCSS('--ig'),getCSS('--tw'),getCSS('--yt'),getCSS('--li')];
+  data.forEach((d,i)=>{
+    const angle=(d.pct/100)*Math.PI*2;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,start+angle);ctx.closePath();
+    ctx.fillStyle=colors[i];ctx.fill();
+    ctx.beginPath();ctx.arc(cx,cy,inner,0,Math.PI*2);
+    ctx.fillStyle=getCSS('--bg2');ctx.fill();
+    start+=angle;
+  });
+}
+
+// ── WEEKLY BARS ───────────────────────────────────────
+function renderWeeklyBars(){
+  const wrap=document.getElementById('weeklyBars');
+  if(!wrap)return;
+  const mx=Math.max(...DATA.weekly.map(d=>d.val));
+  wrap.innerHTML=DATA.weekly.map(d=>`
+    <div class="wbar-col">
+      <div class="wbar-val mono">${d.val}</div>
+      <div class="wbar-track" title="${d.day}: ${d.val} engagements">
+        <div class="wbar-fill" style="height:0%" data-h="${(d.val/mx*100).toFixed(1)}%"></div>
+      </div>
+      <div class="wbar-label">${d.day}</div>
+    </div>
+  `).join('');
+  setTimeout(()=>{
+    wrap.querySelectorAll('.wbar-fill').forEach(b=>{
+      b.style.height=b.dataset.h;
+    });
+  },200);
+}
+
+// ── ANALYTICS ─────────────────────────────────────────
+function renderLocations(){
+  const el=document.getElementById('topLocations');
+  if(!el)return;
+  el.innerHTML=DATA.locations.map(l=>`
+    <div class="location-item">
+      <span class="loc-name">${l.name}</span>
+      <div class="loc-track"><div class="loc-fill" style="width:0%" data-w="${l.pct}%"></div></div>
+      <span class="loc-pct">${l.pct}%</span>
+    </div>
+  `).join('');
+  setTimeout(()=>{el.querySelectorAll('.loc-fill').forEach(b=>b.style.width=b.dataset.w)},200);
+}
+
+function renderAgeBars(){
+  const el=document.getElementById('ageBars');
+  if(!el)return;
+  const mx=Math.max(...DATA.ages.map(a=>a.pct));
+  el.innerHTML=DATA.ages.map(a=>`
+    <div class="age-col">
+      <div class="age-pct">${a.pct}%</div>
+      <div class="age-bar" style="height:0px" data-h="${(a.pct/mx*80)}px"></div>
+      <div class="age-lbl">${a.grp}</div>
+    </div>
+  `).join('');
+  setTimeout(()=>{el.querySelectorAll('.age-bar').forEach(b=>b.style.height=b.dataset.h)},200);
+}
+
+function renderHoursGrid(){
+  const el=document.getElementById('hoursGrid');
+  if(!el)return;
+  const mx=Math.max(...DATA.hours);
+  el.innerHTML=DATA.hours.map((h,i)=>{
+    const intensity=h/mx;
+    const alpha=0.1+intensity*0.85;
+    const hour=i<12?`${i===0?12:i}am`:`${i===12?12:i-12}pm`;
+    return `<div class="hour-cell" data-tip="${hour}: ${h}% active" style="background:rgba(124,107,255,${alpha})"></div>`;
+  }).join('');
+}
+
+// ── POSTS ─────────────────────────────────────────────
+let posts=[...DATA.posts];
+let activeFilter='all';
+
+function renderPosts(){
+  const el=document.getElementById('scheduledList');
+  if(!el)return;
+  const filtered=activeFilter==='all'?posts:posts.filter(p=>p.status===activeFilter);
+  document.getElementById('scheduledCount').textContent=posts.filter(p=>p.status==='scheduled').length;
+  if(filtered.length===0){
+    el.innerHTML=`<div class="empty-state"><i class="fa-regular fa-calendar-xmark"></i><p>No posts here yet.</p></div>`;
+    return;
+  }
+  el.innerHTML=filtered.map(p=>`
+    <div class="post-card" data-id="${p.id}">
+      <div class="post-plat-dot ${p.cls}"><i class="fa-brands ${p.icon}"></i></div>
+      <div class="post-body">
+        <div class="post-platform">${p.platform} · ${p.type}</div>
+        <div class="post-caption">${p.caption}</div>
+        <div class="post-meta">
+          <span><i class="fa-regular fa-clock"></i> ${new Date(p.date).toLocaleString('en',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</span>
+          <span class="post-status ${p.status}">${p.status.charAt(0).toUpperCase()+p.status.slice(1)}</span>
+        </div>
+      </div>
+      <div class="post-actions">
+        <button class="post-action-btn edit" data-id="${p.id}" title="Edit"><i class="fa-solid fa-pen"></i></button>
+        <button class="post-action-btn" data-id="${p.id}" title="Delete"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>
+  `).join('');
+
+  el.querySelectorAll('.post-action-btn:not(.edit)').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const id=Number(btn.dataset.id);
+      posts=posts.filter(p=>p.id!==id);
+      renderPosts();
+      showToast('Post deleted');
+    });
+  });
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter=btn.dataset.filter;
+    renderPosts();
+  });
+});
+
+// ── TOP CONTENT ───────────────────────────────────────
+let activePlat='all';
+function renderTopContent(){
+  const el=document.getElementById('topGrid');
+  if(!el)return;
+  const filtered=activePlat==='all'?DATA.topContent:DATA.topContent.filter(c=>c.plat===activePlat);
+  el.innerHTML=filtered.map((c,i)=>`
+    <div class="content-card">
+      <div class="content-thumb" style="background:${c.bg}">
+        <span style="filter:drop-shadow(0 2px 8px rgba(0,0,0,0.4))">${c.emoji}</span>
+        <div class="rank-badge">#${i+1}</div>
+      </div>
+      <div class="content-body">
+        <div class="content-title">${c.title}</div>
+        <div class="content-stats">
+          <span><i class="fa-solid fa-heart" style="color:#ef4444"></i>${c.likes}</span>
+          <span><i class="fa-solid fa-comment" style="color:var(--accent)"></i>${c.comments}</span>
+          <span><i class="fa-solid fa-share-nodes" style="color:var(--green)"></i>${c.shares}</span>
+        </div>
+        <div class="content-grow ${c.dir}">
+          <i class="fa-solid fa-arrow-${c.dir==='up'?'trend-up':'trend-down'}"></i>
+          ${c.growth} engagement
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.querySelectorAll('.ptab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    activePlat=btn.dataset.plat;
+    renderTopContent();
+  });
+});
+
+// ── MODAL ─────────────────────────────────────────────
+const modalOverlay=document.getElementById('modalOverlay');
+document.getElementById('openModal').addEventListener('click',()=>{
+  modalOverlay.classList.add('open');
+  const now=new Date();now.setHours(now.getHours()+1,0,0,0);
+  document.getElementById('newDate').value=now.toISOString().slice(0,16);
+});
+document.getElementById('closeModal').addEventListener('click',()=>modalOverlay.classList.remove('open'));
+modalOverlay.addEventListener('click',e=>{if(e.target===modalOverlay)modalOverlay.classList.remove('open')});
+
+// Platform selector
+let selectedPlatform='Instagram';
+document.querySelectorAll('.plat-opt').forEach(opt=>{
+  opt.addEventListener('click',()=>{
+    document.querySelectorAll('.plat-opt').forEach(o=>o.classList.remove('selected'));
+    opt.classList.add('selected');
+    selectedPlatform=opt.dataset.plat;
+  });
+});
+
+// Char count
+const caption=document.getElementById('newCaption');
+const charLeft=document.getElementById('charLeft');
+caption.addEventListener('input',()=>{charLeft.textContent=280-caption.value.length});
+
+function savePostHelper(status){
+  const cap=caption.value.trim();
+  const dt=document.getElementById('newDate').value;
+  const type=document.getElementById('postType').value;
+  if(!cap){showToast('Please add a caption','error');return}
+  if(!dt&&status==='scheduled'){showToast('Please set a date','error');return}
+  const platMap={Instagram:{icon:'fa-instagram',cls:'ig'},Twitter:{icon:'fa-x-twitter',cls:'tw'},YouTube:{icon:'fa-youtube',cls:'yt'},LinkedIn:{icon:'fa-linkedin-in',cls:'li'}};
+  const pm=platMap[selectedPlatform];
+  posts.unshift({id:Date.now(),platform:selectedPlatform,...pm,caption:cap,date:dt||new Date().toISOString().slice(0,16),type,status});
+  caption.value='';charLeft.textContent=280;
+  modalOverlay.classList.remove('open');
+  renderPosts();
+  showToast(status==='draft'?'Draft saved!':'Post scheduled!');
+}
+
+document.getElementById('savePost').addEventListener('click',()=>savePostHelper('scheduled'));
+document.getElementById('saveDraft').addEventListener('click',()=>savePostHelper('draft'));
+
+// ── ANIMATE COUNTERS ──────────────────────────────────
+function initCounters(){
+  document.querySelectorAll('[data-target]').forEach(el=>{
+    animateCount(el,Number(el.dataset.target));
+  });
+}
+
+// ── INIT ──────────────────────────────────────────────
+function init(){
+  initCounters();
+  renderWeeklyBars();
+  renderLocations();
+  renderAgeBars();
+  renderHoursGrid();
+  renderPosts();
+  renderTopContent();
+
+  // Sparklines
+  drawSparkline('spark-ig',DATA.sparklines.ig,'#e1306c');
+  drawSparkline('spark-tw',DATA.sparklines.tw,'#1d9bf0');
+  drawSparkline('spark-yt',DATA.sparklines.yt,'#ff0000');
+  drawSparkline('spark-li',DATA.sparklines.li,'#0a66c2');
+
+  // Growth chart
+  setTimeout(()=>{
+    drawLineChart('growthChart',DATA.growth.labels,[
+      {data:DATA.growth.ig,color:'#e1306c'},
+      {data:DATA.growth.tw,color:'#1d9bf0'},
+      {data:DATA.growth.yt,color:'#ff0000'},
+    ]);
+    drawLineChart('engageChart',DATA.engage.labels.filter((_,i)=>i%5===0),[ // sample every 5
+      {data:DATA.engage.ig.filter((_,i)=>i%5===0),color:'#e1306c'},
+      {data:DATA.engage.tw.filter((_,i)=>i%5===0),color:'#1d9bf0'},
+      {data:DATA.engage.li.filter((_,i)=>i%5===0),color:'#0a66c2'},
+    ]);
+    drawDonut('donutChart',[{pct:43},{pct:29},{pct:18},{pct:10}]);
+  },100);
+}
+
+window.addEventListener('load',init);
+
+// Redraw charts on theme change
+themeToggle.addEventListener('click',()=>{
+  setTimeout(()=>{
+    drawLineChart('growthChart',DATA.growth.labels,[
+      {data:DATA.growth.ig,color:'#e1306c'},
+      {data:DATA.growth.tw,color:'#1d9bf0'},
+      {data:DATA.growth.yt,color:'#ff0000'},
+    ]);
+    drawLineChart('engageChart',DATA.engage.labels.filter((_,i)=>i%5===0),[
+      {data:DATA.engage.ig.filter((_,i)=>i%5===0),color:'#e1306c'},
+      {data:DATA.engage.tw.filter((_,i)=>i%5===0),color:'#1d9bf0'},
+      {data:DATA.engage.li.filter((_,i)=>i%5===0),color:'#0a66c2'},
+    ]);
+    drawDonut('donutChart',[{pct:43},{pct:29},{pct:18},{pct:10}]);
+  },50);
+});
+</script>
 </body>
 </html>
